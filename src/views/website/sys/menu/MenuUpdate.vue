@@ -69,8 +69,8 @@
           <ElCol :span="12">
             <ElFormItem prop="flag" label="状态">
               <ElRadioGroup v-model="updateForm.data.flag">
-                <ElRadio label="Y"> 正常 </ElRadio>
-                <ElRadio label="N"> 禁用 </ElRadio>
+                <ElRadio value="Y"> 正常 </ElRadio>
+                <ElRadio value="N"> 禁用 </ElRadio>
               </ElRadioGroup>
             </ElFormItem>
           </ElCol>
@@ -78,10 +78,10 @@
 
         <ElFormItem prop="type" label="类型">
           <ElRadioGroup v-model="updateForm.data.type">
-            <ElRadio :label="1"> 目录 </ElRadio>
-            <ElRadio :label="2"> 菜单 </ElRadio>
-            <ElRadio :label="3"> 按钮 </ElRadio>
-            <ElRadio :label="4"> 链接 </ElRadio>
+            <ElRadio :value="1"> 目录 </ElRadio>
+            <ElRadio :value="2"> 菜单 </ElRadio>
+            <ElRadio :value="3"> 按钮 </ElRadio>
+            <ElRadio :value="4"> 链接 </ElRadio>
           </ElRadioGroup>
         </ElFormItem>
 

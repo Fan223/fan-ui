@@ -20,10 +20,10 @@
     <b ml--4> 查询结果 </b>
 
     <div>
-      <ElButton type="primary" size="small">
-        <RouterLink to="/article/add"> 新增 </RouterLink>
-      </ElButton>
-      <ElButton type="primary" size="small" @click="exportArticles"> 导出 </ElButton>
+      <RouterLink to="/article/add">
+        <ElButton type="primary" size="small"> 新增 </ElButton>
+      </RouterLink>
+      <ElButton type="primary" size="small" @click="exportArticles" ml-3> 导出 </ElButton>
       <ElButton type="danger" size="small" @click="cleanInvalidImages"> 清理图片 </ElButton>
       <ElPopconfirm
         v-if="multipleSelection.length > 0"
