@@ -1,0 +1,12 @@
+.el-drawer {
+  --el-bg-color: var(--background-secondary);
+}
+
+.el-menu {
+  border: none !important;
+
+  --el-menu-bg-color: var(--background-secondary);
+  --el-menu-text-color: var(--text-normal);
+  --el-menu-active-color: var(--text-accent);
+  --el-menu-hover-bg-color: var(--background-trans);
+}

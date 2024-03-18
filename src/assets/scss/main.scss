@@ -1,0 +1,25 @@
+@import '../css/theme.css';
+@import '../css/el.css';
+
+body {
+  margin: 0;
+  width: 100% !important;
+  min-width: 21rem;
+}
+
+:root {
+  // Aurora
+  --main-gradient: linear-gradient(130deg, #24c6dc, #5433ff 41.07%, #ff0099 76.05%);
+  --main-transition: all 0.25s ease-in-out;
+  --text-vip: rgb(251, 146, 60);
+
+  background-color: var(--background-primary);
+  color: var(--text-normal);
+  font-family: system-ui, sans-serif;
+  scrollbar-color: var(--background-scrollbar-thumb) var(--background-scrollbar-track);
+}
+
+a {
+  text-decoration: none;
+  color: unset;
+}
