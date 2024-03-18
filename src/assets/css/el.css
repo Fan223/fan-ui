@@ -2,6 +2,11 @@
   --el-bg-color: var(--background-secondary);
 }
 
+.el-dialog {
+  --el-bg-color: var(--background-secondary);
+  --el-text-color-primary: var(--text-normal);
+}
+
 .el-menu {
   border: none !important;
 
@@ -9,4 +14,83 @@
   --el-menu-text-color: var(--text-normal);
   --el-menu-active-color: var(--text-accent);
   --el-menu-hover-bg-color: var(--background-trans);
+}
+
+.el-pagination {
+  --el-fill-color: var(--background-trans);
+  --el-text-color-primary: var(--text-normal);
+  --el-color-primary: var(--text-accent);
+  --el-color-white: var(--text-bright);
+  --el-disabled-bg-color: var(--background-trans);
+  --el-text-color-placeholder: var(--text-dim);
+  --el-text-color-regular: var(--text-dim);
+
+  li,
+  button {
+    border-radius: 20% !important;
+  }
+}
+
+.el-form {
+  --el-text-color-regular: var(--text-normal);
+}
+
+.el-input,
+.el-select {
+  --el-fill-color-blank: var(--background-secondary);
+  --el-border-color: var(--border-color-bright);
+  --el-border-color-hover: var(--text-accent);
+  --el-color-primary: var(--text-accent);
+}
+
+.el-popper {
+  --el-bg-color-overlay: var(--background-primary);
+  --el-text-color-regular: var(--text-normal);
+  --el-border-color-light: var(--border-color-normal);
+
+  --el-fill-color-light: var(--background-trans);
+  --el-color-primary: var(--text-accent);
+}
+
+.el-input-number {
+  --el-fill-color-light: var(--background-secondary);
+  --el-border: 1px solid var(--border-color-normal);
+  --el-text-color-placeholder: var(--text-dim);
+  --el-color-primary: var(--text-accent);
+}
+
+.el-radio {
+  --el-color-primary: var(--text-accent);
+  --el-fill-color-blank: var(--background-secondary);
+  --el-border: 1px solid var(--border-color-bright);
+}
+
+.el-input__wrapper,
+.el-select__wrapper,
+.el-checkbox__inner,
+.el-table__cell,
+.el-radio__inner::after {
+  transition: none !important;
+}
+
+.el-table {
+  --el-fill-color-blank: var(--background-secondary);
+  --el-bg-color: var(--background-secondary);
+  --el-border-color-lighter: var(--border-color-bright);
+
+  --el-text-color-secondary: var(--text-normal);
+  --el-text-color-regular: var(--text-normal);
+  --el-fill-color-light: var(--border-color-bright);
+}
+
+.el-checkbox {
+  --el-fill-color-blank: var(--background-secondary);
+  --el-text-color-regular: var(--text-normal);
+  --el-border: 1px solid var(--border-color-bright);
+
+  --el-fill-color-light: var(--background-secondary);
+  --el-border-color: var(--border-color-bright);
+  --el-color-primary: var(--text-accent);
+  --el-color-white: var(--text-bright);
+  --el-disabled-text-color: var(--text-dim);
 }

@@ -29,107 +29,19 @@
 
 <script setup lang="ts">
 import { useNavMenuStore } from '@/pinia';
+import { stringify } from 'qs';
 
 const { topMenu } = storeToRefs(useNavMenuStore());
-topMenu.value.data = [
-  {
-    id: '81973921257693184',
-    parentId: '',
-    position: 'top',
-    name: '个人博客',
-    path: '/blog',
-    authority: 'blog',
-    component: '/blog',
-    type: 2,
-    icon: 'i-ic-round-menu-book',
-    orderNum: 100,
-    flag: 'Y',
-    createTime: '2023-10-18 15:04:36',
-    updateTime: '2023-10-18 15:04:36',
-    children: [],
-  },
-  {
-    id: '81977524441653248',
-    parentId: '',
-    position: 'top',
-    name: '在线工具',
-    path: '/tool',
-    authority: 'tool',
-    component: '/tool',
-    type: 2,
-    icon: 'i-mdi-tools',
-    orderNum: 200,
-    flag: 'Y',
-    createTime: '2023-10-18 15:18:55',
-    updateTime: '2023-10-18 15:18:55',
-    children: [],
-  },
-  {
-    id: '81977748383932416',
-    parentId: '',
-    position: 'top',
-    name: '网站后台',
-    path: '/website',
-    authority: 'website',
-    component: '/website',
-    type: 2,
-    icon: 'i-mdi-web',
-    orderNum: 300,
-    flag: 'Y',
-    createTime: '2023-10-18 15:19:49',
-    updateTime: '2023-10-18 15:19:49',
-    children: [],
-  },
-  {
-    id: '81979760127320064',
-    parentId: '',
-    position: 'top',
-    name: '关于',
-    path: '/link',
-    authority: 'link',
-    component: '',
-    type: 1,
-    icon: 'i-mdi-about',
-    orderNum: 400,
-    flag: 'Y',
-    createTime: '2023-10-18 15:27:48',
-    updateTime: '2023-10-18 15:27:48',
-    children: [
-      {
-        id: '81980159001436160',
-        parentId: '81979760127320064',
-        position: 'top',
-        name: 'GitHub 仓库',
-        path: 'https://github.com/Fan223',
-        authority: '',
-        component: '',
-        type: 4,
-        icon: 'i-line-md-github',
-        orderNum: 410,
-        flag: 'Y',
-        createTime: '2023-10-18 15:29:23',
-        updateTime: '2023-10-18 15:29:23',
-        children: [],
-      },
-      {
-        id: '81985658707054592',
-        parentId: '81979760127320064',
-        position: 'top',
-        name: 'Blog',
-        path: 'https://blog.fan223.cn/',
-        authority: '',
-        component: '',
-        type: 2,
-        icon: 'i-ic-round-menu-book',
-        orderNum: 420,
-        flag: 'Y',
-        createTime: '2023-10-18 15:51:15',
-        updateTime: '2023-10-18 15:51:15',
-        children: [],
-      },
-    ],
-  },
-];
+
+function listMenus() {
+  request
+    .get('/fan/sys/menu/listMenus?' + stringify({ position: 'top', type: [1, 2, 4], flag: 'Y' }))
+    .then((res) => {
+      topMenu.value.data = res.data;
+    })
+    .catch(() => {});
+}
+listMenus();
 </script>
 
 <style scoped lang="scss">
