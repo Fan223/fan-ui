@@ -37,6 +37,10 @@
 
       <div v-if="!topMenu.dialog" class="i-line-md-menu-fold-left header-icon" @click="topMenu.dialog = true" hidden />
       <div v-if="topMenu.dialog" class="i-line-md-close-small header-icon" @click="topMenu.dialog = false" />
+
+      <ElAvatar src="https://img.fan223.cn/wallpaper/avatar/avatar1.jpg" @click="loginDialog = true" ml-2>
+        登录
+      </ElAvatar>
     </div>
   </header>
 </template>
@@ -46,7 +50,7 @@ import Nav from './Nav.vue';
 import ThemeIcon from './ThemeIcon.vue';
 import { useGlobalStore, useNavMenuStore } from '@/pinia';
 
-const { scrollPercent, screenWidth } = storeToRefs(useGlobalStore());
+const { scrollPercent, screenWidth, loginDialog } = storeToRefs(useGlobalStore());
 function calcScrollPercent() {
   let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
   let windowHeight = window.innerHeight;

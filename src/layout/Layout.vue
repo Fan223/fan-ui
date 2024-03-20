@@ -9,6 +9,7 @@
       :modal="false"
       :show-close="false"
       direction="ttb"
+      :lock-scroll="false"
     >
       <template #header>
         <Header style="color: var(--text-bright)" />
@@ -20,12 +21,14 @@
     </ElDrawer>
   </div>
 
+  <Login />
   <RouterView />
 </template>
 
 <script setup lang="ts">
 import Header from './header/Header.vue';
 import HeaderChild from './header/HeaderChild.vue';
+import Login from '@/views/Login.vue';
 import { useNavMenuStore } from '@/pinia';
 
 const { topMenu } = storeToRefs(useNavMenuStore());
