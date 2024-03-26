@@ -187,9 +187,10 @@ function cleanInvalidImages() {
 
 async function exportArticles() {
   if (multipleSelection.value.length === 0) {
-    location.href = '/fan/blog/article/exportAllArticles';
+    location.href = '/fan/blog/article/exportAllArticles?token=' + localStorage.getItem('token');
   } else {
-    location.href = '/fan/blog/article/batchExportArticles/' + multipleSelection.value;
+    location.href =
+      '/fan/blog/article/batchExportArticles/' + multipleSelection.value + '?token=' + localStorage.getItem('token');
   }
 }
 </script>

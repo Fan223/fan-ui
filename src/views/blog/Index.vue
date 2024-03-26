@@ -50,8 +50,10 @@
     background
     hide-on-single-page
     flex="~ justify-center"
-    my-8
+    mt-8
   />
+
+  <Footer v-if="articles.length > 0" />
 </template>
 
 <script setup lang="ts">

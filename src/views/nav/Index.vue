@@ -1,5 +1,6 @@
 <template>
   <div>resource</div>
+  <Footer />
 </template>
 
 <script setup lang="ts"></script>
