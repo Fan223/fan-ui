@@ -21,7 +21,7 @@
 
     <ElFormItem>
       <ElButton type="primary" size="small" @click="listMenus"> 查询 </ElButton>
-      <ElButton type="info" size="small" @click="resetForm(queryFormRef)"> 重置 </ElButton>
+      <ElButton type="info" size="small" @click="queryFormRef.resetFields()"> 重置 </ElButton>
     </ElFormItem>
   </ElForm>
 
@@ -108,7 +108,6 @@
 import MenuAdd from './MenuAdd.vue';
 import MenuUpdate from './MenuUpdate.vue';
 import { Menu } from '@/router/menu';
-import { resetForm } from '@/assets/ts/el';
 import { stringify } from 'qs';
 
 const queryForm = reactive({

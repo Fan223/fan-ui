@@ -1,6 +1,12 @@
 <template>
   <div>
-    <ElDialog v-model="props.dialog.visible" title="发布文章" width="60%">
+    <ElDialog
+      v-model="props.dialog.visible"
+      title="发布文章"
+      width="60%"
+      :close-on-click-modal="false"
+      :lock-scroll="false"
+    >
       <ElCheckboxGroup v-model="checkedCategory.name" :min="0" :max="1" size="large" border>
         <ElCheckbox
           v-for="category in categories.data"

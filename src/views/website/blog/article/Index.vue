@@ -12,7 +12,7 @@
 
     <ElFormItem>
       <ElButton type="primary" size="small" @click="pageArticles"> 查询 </ElButton>
-      <ElButton type="info" size="small" @click="resetForm(queryFormRef)"> 重置 </ElButton>
+      <ElButton type="info" size="small" @click="queryFormRef.resetFields()"> 重置 </ElButton>
     </ElFormItem>
   </ElForm>
 
@@ -96,7 +96,6 @@
 <script setup lang="ts">
 import { Category } from '../category/category';
 import { Article } from './article';
-import { resetForm } from '@/assets/ts/el';
 import { stringify } from 'qs';
 
 const queryForm = reactive({

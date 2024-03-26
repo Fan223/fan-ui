@@ -94,3 +94,7 @@
   --el-color-white: var(--text-bright);
   --el-disabled-text-color: var(--text-dim);
 }
+
+.el-tree {
+  --el-fill-color-blank: var(--background-secondary);
+}

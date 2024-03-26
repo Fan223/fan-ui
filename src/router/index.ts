@@ -48,8 +48,13 @@ router.beforeEach(async (to) => {
         });
         isRoute.value = true;
       })
-      .catch(() => {
-        ElMessage.error('Failed to initialize routes');
+      .catch(async (error) => {
+        if (401 === error.response.status) {
+          await login();
+          router.go(0);
+        } else {
+          ElMessage.error('Failed to initialize routes');
+        }
       });
 
     if (isRoute.value) {

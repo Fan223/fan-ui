@@ -5,6 +5,7 @@
       title="修改菜单"
       width="60%"
       :close-on-click-modal="false"
+      :lock-scroll="false"
       @open="updateForm.data = { ...props.updateRow }"
       @close="updateFormRef.resetFields()"
     >

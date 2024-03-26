@@ -5,6 +5,7 @@
       title="添加菜单"
       width="60%"
       :close-on-click-modal="false"
+      :lock-scroll="false"
       @close="addFormRef.resetFields()"
     >
       <ElForm :model="addForm" ref="addFormRef" label-width="80px">
