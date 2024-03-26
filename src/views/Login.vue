@@ -3,7 +3,7 @@
     <ElDialog
       v-model="loginDialog"
       style="border-radius: 1rem; padding: 1.5rem"
-      width="380px"
+      width="340px"
       :lock-scroll="false"
       :close-on-click-modal="false"
       @close="loginFormRef.resetFields()"
@@ -43,12 +43,14 @@ const loginForm = reactive({
 const loginFormRef = ref();
 
 function login() {
-  if ('fan' === loginForm.username && 'fan223' === loginForm.password && '200103' === loginForm.captcha) {
-    localStorage.setItem('fan', 'fan');
-    loginDialog.value = false;
-  } else {
-    ElMessage.error('用户名或密码错误');
-  }
+  request.post('/fan/login', loginForm).then((res: any) => {
+    if (200 === res.code) {
+      localStorage.setItem('token', res.data);
+      router.go(0);
+    } else {
+      ElMessage.error(res.message);
+    }
+  });
 }
 </script>
 

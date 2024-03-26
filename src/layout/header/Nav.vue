@@ -29,19 +29,8 @@
 
 <script setup lang="ts">
 import { useNavMenuStore } from '@/pinia';
-import { stringify } from 'qs';
 
 const { topMenu } = storeToRefs(useNavMenuStore());
-
-function listMenus() {
-  request
-    .get('/fan/sys/menu/listMenus?' + stringify({ position: 'top', type: [1, 2, 4], flag: 'Y' }))
-    .then((res) => {
-      topMenu.value.data = res.data;
-    })
-    .catch(() => {});
-}
-listMenus();
 </script>
 
 <style scoped lang="scss">

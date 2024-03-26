@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { useNavMenuStore } from '@/pinia';
 import { Menu } from './menu';
-import { stringify } from 'qs';
 
 const router = createRouter({
   scrollBehavior(_to, _from, savedPosition) {
@@ -13,7 +12,7 @@ const router = createRouter({
       path: '/',
       name: 'Layout',
       component: () => import('@/layout/Layout.vue'),
-      redirect: '/blog',
+      redirect: '/nav',
       children: [
         { path: '/aside', name: 'Aside', component: () => import('@/layout/aside/Aside.vue') },
         { path: '/:pathMatch(.*)*', name: '404', component: () => import('@/error/404.vue') },
@@ -33,22 +32,29 @@ const router = createRouter({
   ],
 });
 
-router.beforeEach((to, _from, next) => {
+router.beforeEach(async (to) => {
   const { isRoute, topMenu, asideMenu } = storeToRefs(useNavMenuStore());
 
+  if (!localStorage.getItem('token')) {
+    await login();
+  }
+
   if (!isRoute.value) {
-    request
-      .get('/fan/sys/menu/listMenus?' + stringify({ type: [1, 2, 4], flag: 'Y' }))
+    await request
+      .get('/fan/sys/menu/listRouteMenus')
       .then((res) => {
         res.data.forEach((menu: Menu) => {
           bindRoute(menu);
         });
         isRoute.value = true;
-        next(to.path);
       })
       .catch(() => {
-        ElMessage.error('Error occurred while retrieving menus');
+        ElMessage.error('Failed to initialize routes');
       });
+
+    if (isRoute.value) {
+      return to.fullPath;
+    }
   } else {
     router.isReady().then(() => {
       let id = to.name as string;
@@ -68,13 +74,25 @@ router.beforeEach((to, _from, next) => {
               topMenu.value.active = res.data;
             })
             .catch(() => {
-              ElMessage.error('Error occurred while retrieving menus');
+              ElMessage.error('Failed to retrieve aside menus');
             });
         }
       }
     });
-    next();
   }
 });
+
+async function login() {
+  let loginForm = reactive({
+    username: 'common',
+    password: 'common',
+  });
+
+  await request.post('/fan/login', loginForm).then((res: any) => {
+    if (200 === res.code) {
+      localStorage.setItem('token', res.data);
+    }
+  });
+}
 
 export default router;

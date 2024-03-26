@@ -3,6 +3,7 @@ import { defineConfig, presetUno, presetIcons, presetAttributify, presetTypograp
 export default defineConfig({
   presets: [presetUno(), presetIcons(), presetAttributify(), presetTypography(), presetTagify()],
   safelist: [
+    'i-mdi-navigation-variant-outline',
     'i-ic-round-menu-book',
     'i-mdi-tools',
     'i-mdi-web',

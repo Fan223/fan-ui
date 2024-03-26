@@ -50,43 +50,8 @@ import Nav from './Nav.vue';
 import ThemeIcon from './ThemeIcon.vue';
 import { useGlobalStore, useNavMenuStore } from '@/pinia';
 
-const { scrollPercent, screenWidth, loginDialog } = storeToRefs(useGlobalStore());
-function calcScrollPercent() {
-  let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-  let windowHeight = window.innerHeight;
-  let scrollHeight = document.documentElement.scrollHeight;
-
-  let scrolled = Math.min((scrollTop / (scrollHeight - windowHeight)) * 100, 100);
-  scrollPercent.value = Math.ceil(scrolled);
-}
-function handleScroll() {
-  requestAnimationFrame(() => {
-    calcScrollPercent();
-  });
-}
-
-const { topMenu, asideMenu } = storeToRefs(useNavMenuStore());
-function handleScreenResize() {
-  screenWidth.value = window.innerWidth;
-
-  if (screenWidth.value >= 768 && topMenu.value.dialog) {
-    topMenu.value.dialog = false;
-  }
-  if (screenWidth.value >= 992 && asideMenu.value.drawer) {
-    asideMenu.value.drawer = false;
-  }
-}
-
-onMounted(() => {
-  window.addEventListener('scroll', handleScroll);
-  window.addEventListener('resize', handleScroll);
-  window.addEventListener('resize', handleScreenResize);
-});
-onBeforeUnmount(() => {
-  window.removeEventListener('scroll', handleScroll);
-  window.removeEventListener('resize', handleScroll);
-  window.removeEventListener('resize', handleScreenResize);
-});
+const { scrollPercent, loginDialog } = storeToRefs(useGlobalStore());
+const { topMenu } = storeToRefs(useNavMenuStore());
 </script>
 
 <style scoped lang="scss">

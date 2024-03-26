@@ -29,9 +29,57 @@
 import Header from './header/Header.vue';
 import HeaderChild from './header/HeaderChild.vue';
 import Login from '@/views/Login.vue';
-import { useNavMenuStore } from '@/pinia';
+import { useGlobalStore, useNavMenuStore } from '@/pinia';
 
-const { topMenu } = storeToRefs(useNavMenuStore());
+const { scrollPercent, screenWidth } = storeToRefs(useGlobalStore());
+function calcScrollPercent() {
+  let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+  let windowHeight = window.innerHeight;
+  let scrollHeight = document.documentElement.scrollHeight;
+
+  let scrolled = Math.min((scrollTop / (scrollHeight - windowHeight)) * 100, 100);
+  scrollPercent.value = Math.ceil(scrolled);
+}
+function handleScroll() {
+  requestAnimationFrame(() => {
+    calcScrollPercent();
+  });
+}
+
+const { topMenu, asideMenu } = storeToRefs(useNavMenuStore());
+function handleScreenResize() {
+  screenWidth.value = window.innerWidth;
+
+  if (screenWidth.value >= 768 && topMenu.value.dialog) {
+    topMenu.value.dialog = false;
+  }
+  if (screenWidth.value >= 992 && asideMenu.value.drawer) {
+    asideMenu.value.drawer = false;
+  }
+}
+
+function listNavMenus() {
+  request
+    .get('/fan/sys/menu/listNavMenus')
+    .then((res) => {
+      topMenu.value.data = res.data;
+    })
+    .catch(() => {
+      ElMessage.error('Failed to retrieve top navigation menus');
+    });
+}
+listNavMenus();
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll);
+  window.addEventListener('resize', handleScroll);
+  window.addEventListener('resize', handleScreenResize);
+});
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', handleScroll);
+  window.removeEventListener('resize', handleScroll);
+  window.removeEventListener('resize', handleScreenResize);
+});
 </script>
 
 <style scoped lang="scss"></style>
