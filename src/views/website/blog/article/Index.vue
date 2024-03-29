@@ -16,9 +16,8 @@
     </ElFormItem>
   </ElForm>
 
-  <div flex="~ justify-between" my-1>
+  <div flex="~ justify-between">
     <b ml--4> 查询结果 </b>
-
     <div>
       <RouterLink to="/article/add">
         <ElButton type="primary" size="small"> 新增 </ElButton>
@@ -32,7 +31,7 @@
         confirm-button-text="取消"
         cancel-button-type="danger"
         cancel-button-text="删除"
-        @cancel="deleteArticle(multipleSelection)"
+        @cancel="batchDeleteArticles(multipleSelection)"
       >
         <template #reference>
           <ElButton type="danger" size="small"> 批量删除 </ElButton>
@@ -42,32 +41,32 @@
   </div>
 
   <!-- Result area -->
-  <ElTable :data="articles" max-height="420px" @selection-change="handleSelectionChange">
+  <ElTable :data="articles" max-height="430px" @selection-change="handleSelectionChange">
     <ElTableColumn type="selection" />
     <ElTableColumn prop="title" label="标题" align="center" min-width="240px" />
+    <ElTableColumn prop="cover" label="封面" align="center" min-width="90px">
+      <template #default="{ row }">
+        <img :src="row.cover" h-10 w-16 rd-1 />
+      </template>
+    </ElTableColumn>
     <ElTableColumn prop="flag" label="状态" align="center" min-width="65px">
       <template #default="{ row }">
         <ElTag v-if="row.flag === 'Y'" effect="dark" type="success" size="small"> 正常 </ElTag>
         <ElTag v-else-if="row.flag === 'N'" effect="dark" type="danger" size="small"> 禁用 </ElTag>
       </template>
     </ElTableColumn>
-    <ElTableColumn prop="cover" label="封面" align="center" min-width="105px">
-      <template #default="{ row }">
-        <img :src="row.cover" h-10 w-16 rd-1 />
-      </template>
-    </ElTableColumn>
     <ElTableColumn prop="createTime" label="创建时间" align="center" min-width="105px" />
 
     <ElTableColumn fixed="right" label="操作" align="center" min-width="195px">
       <template #default="{ row }">
-        <ElButton type="primary" size="small" @click="updateArticle(row.id)"> 编辑 </ElButton>
+        <ElButton type="primary" size="small" @click="updateArticle(row)"> 编辑 </ElButton>
         <ElPopconfirm
           title="确认删除吗？"
           confirm-button-type="info"
           confirm-button-text="取消"
           cancel-button-type="danger"
           cancel-button-text="删除"
-          @cancel="deleteArticle(row.id)"
+          @cancel="batchDeleteArticles(row.id)"
         >
           <template #reference>
             <ElButton type="danger" size="small"> 删除 </ElButton>
@@ -85,11 +84,10 @@
     :total="pagination.total"
     @current-change="handleCurrentChange"
     :pager-count="5"
+    hide-on-single-page
     background
     small
-    hide-on-single-page
-    flex="~ justify-center"
-    mt-6
+    mt-4
   />
 </template>
 
@@ -121,7 +119,9 @@ function listCategories() {
     .then((res) => {
       categories.value = res.data;
     })
-    .catch(() => {});
+    .catch((error) => {
+      ElMessage.error(error.message);
+    });
 }
 listCategories();
 
@@ -142,7 +142,9 @@ function pageArticles() {
       pagination.current = res.data.current;
       pagination.size = res.data.size;
     })
-    .catch(() => {});
+    .catch((error) => {
+      ElMessage.error(error.message);
+    });
 }
 pageArticles();
 
@@ -150,15 +152,15 @@ function handleCurrentChange() {
   pageArticles();
 }
 
-function updateArticle(id: string) {
-  window.open('/article/update/' + id, '_blank');
+function updateArticle(row: Article) {
+  window.open('/article/update/' + row.id, '_blank');
 }
 
 function previewArticle(id: string) {
   window.open('/article/preview/' + id, '_blank');
 }
 
-function deleteArticle(id: string | string[]) {
+function batchDeleteArticles(id: string | string[]) {
   request
     .delete('/fan/blog/article/batchDeleteArticles/' + id)
     .then((res: any) => {
@@ -169,7 +171,9 @@ function deleteArticle(id: string | string[]) {
         ElMessage.error(res.message);
       }
     })
-    .catch(() => {});
+    .catch((error) => {
+      ElMessage.error(error.message);
+    });
 }
 
 function cleanInvalidImages() {
@@ -182,10 +186,12 @@ function cleanInvalidImages() {
         ElMessage.error(res.message);
       }
     })
-    .catch(() => {});
+    .catch((error) => {
+      ElMessage.error(error.message);
+    });
 }
 
-async function exportArticles() {
+function exportArticles() {
   if (multipleSelection.value.length === 0) {
     location.href = '/fan/blog/article/exportAllArticles?token=' + localStorage.getItem('token');
   } else {

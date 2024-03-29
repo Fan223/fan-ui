@@ -122,7 +122,9 @@ function addMenu() {
         ElMessage.error(res.message);
       }
     })
-    .catch(() => {});
+    .catch((error) => {
+      ElMessage.error(error.message);
+    });
 }
 </script>
 

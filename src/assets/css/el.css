@@ -50,6 +50,7 @@
 
   --el-fill-color-light: var(--background-trans);
   --el-color-primary: var(--text-accent);
+  --el-border-color-lighter: var(--border-color-bright);
 }
 
 .el-input-number {
@@ -96,5 +97,5 @@
 }
 
 .el-tree {
-  --el-fill-color-blank: var(--background-secondary);
+  --el-fill-color-blank: var(--background-primary);
 }

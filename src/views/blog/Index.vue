@@ -50,7 +50,6 @@
     background
     hide-on-single-page
     flex="~ justify-center"
-    mt-8
   />
 
   <Footer v-if="articles.length > 0" />

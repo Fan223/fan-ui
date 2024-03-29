@@ -27,7 +27,6 @@
 
   <div flex="~ justify-between">
     <b ml--4> 查询结果 </b>
-
     <div>
       <ElButton type="primary" size="small" @click="dialog.add = true"> 新增 </ElButton>
       <ElPopconfirm
@@ -37,7 +36,7 @@
         confirm-button-text="取消"
         cancel-button-type="danger"
         cancel-button-text="删除"
-        @cancel="deleteMenu(multipleSelection)"
+        @cancel="batchDeleteMenus(multipleSelection)"
       >
         <template #reference>
           <ElButton type="danger" size="small"> 批量删除 </ElButton>
@@ -47,7 +46,7 @@
   </div>
 
   <!-- Result area -->
-  <ElTable :data="menus" row-key="id" @selection-change="handleSelectionChange">
+  <ElTable :data="menus" row-key="id" max-height="470px" @selection-change="handleSelectionChange">
     <ElTableColumn type="selection" />
     <ElTableColumn prop="name" label="名称" min-width="140px" />
     <ElTableColumn prop="position" label="位置" align="center" min-width="65px">
@@ -56,15 +55,15 @@
         <ElTag v-else-if="row.position === 'aside'" effect="dark" type="success" size="small"> 侧栏 </ElTag>
       </template>
     </ElTableColumn>
-    <ElTableColumn prop="path" label="路径" align="center" min-width="130px" />
-    <ElTableColumn prop="authority" label="权限编码" align="center" min-width="120px" />
-    <ElTableColumn prop="component" label="组件" align="center" min-width="120px" />
+    <ElTableColumn prop="path" label="路径" align="center" min-width="160px" />
+    <ElTableColumn prop="authority" label="权限编码" align="center" min-width="150px" />
+    <ElTableColumn prop="component" label="组件" align="center" min-width="165px" />
     <ElTableColumn prop="type" label="类型" align="center" min-width="65px">
       <template #default="{ row }">
-        <ElTag v-if="row.type === '1'" effect="dark" type="info" size="small"> 目录 </ElTag>
-        <ElTag v-else-if="row.type === '2'" effect="dark" type="info" size="small"> 菜单 </ElTag>
-        <ElTag v-else-if="row.type === '3'" effect="dark" type="info" size="small"> 按钮 </ElTag>
-        <ElTag v-else-if="row.type === '4'" effect="dark" type="info" size="small"> 链接 </ElTag>
+        <ElTag v-if="row.type === 1" effect="dark" type="info" size="small"> 目录 </ElTag>
+        <ElTag v-else-if="row.type === 2" effect="dark" type="info" size="small"> 菜单 </ElTag>
+        <ElTag v-else-if="row.type === 3" effect="dark" type="info" size="small"> 按钮 </ElTag>
+        <ElTag v-else-if="row.type === 4" effect="dark" type="info" size="small"> 链接 </ElTag>
       </template>
     </ElTableColumn>
     <ElTableColumn prop="icon" label="图标" align="center" min-width="55px">
@@ -72,7 +71,7 @@
         <div :class="row.icon" h-4 w-4 ma />
       </template>
     </ElTableColumn>
-    <ElTableColumn prop="orderNum" label="排序" align="center" min-width="50px" />
+    <ElTableColumn prop="orderNum" label="排序" align="center" min-width="55px" />
     <ElTableColumn prop="flag" label="状态" align="center" min-width="65px">
       <template #default="{ row }">
         <ElTag v-if="row.flag === 'Y'" effect="dark" type="success" size="small"> 正常 </ElTag>
@@ -90,7 +89,7 @@
           confirm-button-text="取消"
           cancel-button-type="danger"
           cancel-button-text="删除"
-          @cancel="deleteMenu(row.id)"
+          @cancel="batchDeleteMenus(row.id)"
         >
           <template #reference>
             <ElButton type="danger" size="small"> 删除 </ElButton>
@@ -139,7 +138,9 @@ function listMenus() {
     .then((res) => {
       menus.value = res.data;
     })
-    .catch(() => {});
+    .catch((error) => {
+      ElMessage.error(error.message);
+    });
 }
 listMenus();
 
@@ -149,7 +150,7 @@ function updateMenu(row: Menu) {
   updateRow.value = row;
 }
 
-function deleteMenu(id: string | string[]) {
+function batchDeleteMenus(id: string | string[]) {
   request
     .delete('/fan/sys/menu/batchDeleteMenus/' + id)
     .then((res: any) => {
@@ -160,7 +161,9 @@ function deleteMenu(id: string | string[]) {
         ElMessage.error(res.message);
       }
     })
-    .catch(() => {});
+    .catch((error) => {
+      ElMessage.error(error.message);
+    });
 }
 </script>
 

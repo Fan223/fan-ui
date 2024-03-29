@@ -1,6 +1,6 @@
 <template>
   <div class="v-header" h-12 flex="~ items-center justify-between" p="l-4 r-8">
-    <div @click="$router.push('/blog/article')" flex="~ items-center" cursor-pointer>
+    <div @click="$router.push('/web/blog/article')" flex="~ items-center" cursor-pointer>
       <div class="i-line-md-chevron-small-left" h-8 w-8 />
       <ElButton style="padding-left: 0" text> <b font-size-4> 文章管理 </b> </ElButton>
     </div>
@@ -60,7 +60,9 @@ onMounted(() => {
         updateForm.data = res.data;
         vditorRef.value.vditor.setValue(res.data.content);
       })
-      .catch(() => {});
+      .catch((error) => {
+        ElMessage.error(error.message);
+      });
   });
 });
 </script>

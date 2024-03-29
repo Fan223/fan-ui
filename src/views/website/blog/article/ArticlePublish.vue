@@ -9,7 +9,7 @@
     >
       <ElCheckboxGroup v-model="checkedCategory.name" :min="0" :max="1" size="large" border>
         <ElCheckbox
-          v-for="category in categories.data"
+          v-for="category in categories"
           :key="category.id"
           :label="category.name"
           @change="checkedCategory.id = category.id"
@@ -33,25 +33,35 @@ const checkedCategory = reactive({
   name: [],
 });
 
-const categories = reactive({ data: [] as Category[] });
+const categories = ref([] as Category[]);
 function listCategories() {
-  request.get('/fan/blog/category/listCategories?flag=Y').then((res) => {
-    categories.data = res.data;
-  });
+  request
+    .get('/fan/blog/category/listCategories?flag=Y')
+    .then((res) => {
+      categories.value = res.data;
+    })
+    .catch((error) => {
+      ElMessage.error(error.message);
+    });
 }
 listCategories();
 
 function publishArticle() {
   props.form.categoryId = checkedCategory.id;
 
-  request.post('/fan/blog/article/saveArticle', props.form).then((res: any) => {
-    if (200 === res.code) {
-      ElMessage.success('发布成功');
-      router.push('/blog/article');
-    } else {
-      ElMessage.error(res.message);
-    }
-  });
+  request
+    .post('/fan/blog/article/saveArticle', props.form)
+    .then((res: any) => {
+      if (200 === res.code) {
+        ElMessage.success('发布成功');
+        router.push('/web/blog/article');
+      } else {
+        ElMessage.error(res.message);
+      }
+    })
+    .catch((error) => {
+      ElMessage.error(error.message);
+    });
 }
 </script>
 
