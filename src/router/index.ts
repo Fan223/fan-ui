@@ -41,7 +41,7 @@ router.beforeEach(async (to) => {
 
   if (!isRoute.value) {
     await request
-      .get('/fan/sys/menu/listRouteMenus')
+      .get('/fan/admin/menu/listRouteMenus')
       .then((res) => {
         res.data.forEach((menu: Menu) => {
           bindRoute(menu);
@@ -74,7 +74,7 @@ router.beforeEach(async (to) => {
 
         if (!topMenu.value.active) {
           request
-            .get('/fan/sys/menu/getTopMenuId/' + id)
+            .get('/fan/admin/menu/getTopMenuId/' + id)
             .then((res) => {
               topMenu.value.active = res.data;
             })

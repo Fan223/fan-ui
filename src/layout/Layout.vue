@@ -60,7 +60,7 @@ function handleScreenResize() {
 
 function listNavMenus() {
   request
-    .get('/fan/sys/menu/listNavMenus')
+    .get('/fan/admin/menu/listNavMenus')
     .then((res) => {
       topMenu.value.data = res.data;
     })

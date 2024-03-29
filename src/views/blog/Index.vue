@@ -77,7 +77,9 @@ function listCategories() {
     .then((res) => {
       categories.data = res.data;
     })
-    .catch(() => {});
+    .catch((error) => {
+      ElMessage.error(error.message);
+    });
 }
 listCategories();
 
@@ -95,7 +97,9 @@ function pageArticles(categoryId: string, current: number) {
       pagination.total = res.data.total;
       articles.value = res.data.records;
     })
-    .catch(() => {});
+    .catch((error) => {
+      ElMessage.error(error.message);
+    });
 }
 pageArticles('', 1);
 

@@ -54,7 +54,7 @@ watchEffect(() => {
 
   if (parentId) {
     request
-      .get('/fan/sys/menu/listChildMenus/' + parentId)
+      .get('/fan/admin/menu/listChildMenus/' + parentId)
       .then((res) => {
         asideMenu.value.data = res.data;
       })

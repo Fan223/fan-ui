@@ -57,7 +57,7 @@
     </ElTableColumn>
     <ElTableColumn prop="path" label="路径" align="center" min-width="160px" />
     <ElTableColumn prop="authority" label="权限编码" align="center" min-width="150px" />
-    <ElTableColumn prop="component" label="组件" align="center" min-width="165px" />
+    <ElTableColumn prop="component" label="组件" align="center" min-width="185px" />
     <ElTableColumn prop="type" label="类型" align="center" min-width="65px">
       <template #default="{ row }">
         <ElTag v-if="row.type === 1" effect="dark" type="info" size="small"> 目录 </ElTag>
@@ -134,7 +134,7 @@ function listMenus() {
   });
 
   request
-    .get('/fan/sys/menu/listMenus?' + params)
+    .get('/fan/admin/menu/listMenus?' + params)
     .then((res) => {
       menus.value = res.data;
     })
@@ -152,7 +152,7 @@ function updateMenu(row: Menu) {
 
 function batchDeleteMenus(id: string | string[]) {
   request
-    .delete('/fan/sys/menu/batchDeleteMenus/' + id)
+    .delete('/fan/admin/menu/batchDeleteMenus/' + id)
     .then((res: any) => {
       if (200 === res.code) {
         ElMessage.success('删除成功');

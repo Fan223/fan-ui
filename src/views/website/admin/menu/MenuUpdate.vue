@@ -1,19 +1,20 @@
 <template>
   <div>
     <ElDialog
-      v-model="props.dialog.add"
-      title="添加菜单"
+      v-model="props.dialog.update"
+      title="修改菜单"
       width="60%"
       :close-on-click-modal="false"
       :lock-scroll="false"
-      @close="addFormRef.resetFields()"
+      @open="updateForm.data = { ...props.updateRow }"
+      @close="updateFormRef.resetFields()"
     >
-      <ElForm :model="addForm" ref="addFormRef" label-width="80px">
+      <ElForm :model="updateForm.data" ref="updateFormRef" label-width="80px">
         <ElRow>
           <ElCol :span="12">
             <ElFormItem prop="parentId" label="上级菜单">
               <ElTreeSelect
-                v-model="addForm.parentId"
+                v-model="updateForm.data.parentId"
                 :data="props.menus"
                 placeholder="请选择上级菜单"
                 node-key="id"
@@ -26,7 +27,7 @@
           </ElCol>
           <ElCol :span="12">
             <ElFormItem prop="position" label="位置">
-              <ElSelect v-model="addForm.position" placeholder="请选择位置">
+              <ElSelect v-model="updateForm.data.position" placeholder="请选择位置">
                 <ElOption label="顶部" value="top" />
                 <ElOption label="侧栏" value="aside" />
               </ElSelect>
@@ -37,12 +38,12 @@
         <ElRow>
           <ElCol :span="12">
             <ElFormItem prop="name" label="菜单名称">
-              <ElInput v-model="addForm.name" placeholder="请输入菜单名称" clearable />
+              <ElInput v-model="updateForm.data.name" placeholder="请输入菜单名称" clearable />
             </ElFormItem>
           </ElCol>
           <ElCol :span="12">
             <ElFormItem prop="authority" label="权限编码">
-              <ElInput v-model="addForm.authority" placeholder="请输入权限编码" clearable />
+              <ElInput v-model="updateForm.data.authority" placeholder="请输入权限编码" clearable />
             </ElFormItem>
           </ElCol>
         </ElRow>
@@ -50,12 +51,12 @@
         <ElRow>
           <ElCol :span="12">
             <ElFormItem prop="path" label="菜单路径">
-              <ElInput v-model="addForm.path" placeholder="请输入菜单路径" clearable />
+              <ElInput v-model="updateForm.data.path" placeholder="请输入菜单路径" clearable />
             </ElFormItem>
           </ElCol>
           <ElCol :span="12">
             <ElFormItem prop="component" label="组件">
-              <ElInput v-model="addForm.component" placeholder="请输入组件" clearable />
+              <ElInput v-model="updateForm.data.component" placeholder="请输入组件" clearable />
             </ElFormItem>
           </ElCol>
         </ElRow>
@@ -63,12 +64,12 @@
         <ElRow>
           <ElCol :span="12">
             <ElFormItem prop="icon" label="图标">
-              <ElInput v-model="addForm.icon" placeholder="请输入图标" clearable />
+              <ElInput v-model="updateForm.data.icon" placeholder="请输入图标" clearable />
             </ElFormItem>
           </ElCol>
           <ElCol :span="12">
             <ElFormItem prop="flag" label="状态">
-              <ElRadioGroup v-model="addForm.flag">
+              <ElRadioGroup v-model="updateForm.data.flag">
                 <ElRadio value="Y"> 正常 </ElRadio>
                 <ElRadio value="N"> 禁用 </ElRadio>
               </ElRadioGroup>
@@ -77,7 +78,7 @@
         </ElRow>
 
         <ElFormItem prop="type" label="类型">
-          <ElRadioGroup v-model="addForm.type">
+          <ElRadioGroup v-model="updateForm.data.type">
             <ElRadio :value="1"> 目录 </ElRadio>
             <ElRadio :value="2"> 菜单 </ElRadio>
             <ElRadio :value="3"> 按钮 </ElRadio>
@@ -86,13 +87,13 @@
         </ElFormItem>
 
         <ElFormItem prop="orderNum" label="排序号">
-          <ElInputNumber v-model="addForm.orderNum" :min="1" />
+          <ElInputNumber v-model="updateForm.data.orderNum" :min="1" />
         </ElFormItem>
       </ElForm>
 
       <template #footer>
-        <ElButton type="info" @click="props.dialog.add = false"> 取消 </ElButton>
-        <ElButton type="primary" @click="addMenu"> 确定 </ElButton>
+        <ElButton type="info" @click="props.dialog.update = false"> 取消 </ElButton>
+        <ElButton type="primary" @click="updateMenu"> 确定 </ElButton>
       </template>
     </ElDialog>
   </div>
@@ -101,22 +102,20 @@
 <script setup lang="ts">
 import { Menu } from '@/router/menu';
 
-const props = defineProps(['dialog', 'menus']);
+const props = defineProps(['dialog', 'menus', 'updateRow']);
 const emit = defineEmits(['listMenus']);
-const addForm = reactive({
-  type: 1,
-  flag: 'Y',
-  orderNum: 1,
-} as Menu);
-const addFormRef = ref();
+const updateForm = reactive({
+  data: {} as Menu,
+});
+const updateFormRef = ref();
 
-function addMenu() {
+function updateMenu() {
   request
-    .post('/fan/sys/menu/addMenu', addForm)
+    .put('/fan/admin/menu/updateMenu', updateForm.data)
     .then((res: any) => {
       if (200 === res.code) {
-        ElMessage.success('添加成功');
-        props.dialog.add = false;
+        ElMessage.success('修改成功');
+        props.dialog.update = false;
         emit('listMenus');
       } else {
         ElMessage.error(res.message);
