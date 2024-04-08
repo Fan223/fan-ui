@@ -33,21 +33,23 @@
     </div>
   </div>
 
-  <Vditor ref="vditorRef" :form="updateForm.data" />
-  <ArticlePublish :dialog="dialog" :form="updateForm.data" />
+  <Vditor ref="vditorRef" :form="updateForm" />
+  <ArticlePublish ref="articlePublishRef" :dialog="dialog" :form="updateForm.data" />
 </template>
 
 <script setup lang="ts">
 import Vditor from '@/vditor/Vditor.vue';
 import ArticlePublish from './ArticlePublish.vue';
+import { Article } from './article';
 
 const updateForm = reactive({
   data: {
     title: '',
     content: '',
-  },
+  } as Article,
 });
 const vditorRef = ref();
+const articlePublishRef = ref();
 const dialog = reactive({
   visible: false,
 });
@@ -59,6 +61,7 @@ onMounted(() => {
       .then((res) => {
         updateForm.data = res.data;
         vditorRef.value.vditor.setValue(res.data.content);
+        articlePublishRef.value.checkedCategory.push(updateForm.data.categoryId);
       })
       .catch((error) => {
         ElMessage.error(error.message);

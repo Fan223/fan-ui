@@ -53,19 +53,21 @@ onMounted(() => {
         tipPosition: 'n',
         hotkey: '⌘s',
         click() {
-          props.form.content = vditor.value.getValue();
+          props.form.data.content = vditor.value.getValue();
 
           request
-            .post('/fan/blog/article/saveArticle', props.form)
+            .post('/fan/blog/article/saveArticle', props.form.data)
             .then((res: any) => {
               if (res.code === 200) {
                 ElMessage.success('保存成功');
-                props.form.id = res.data;
+                props.form.data = res.data;
               } else {
                 ElMessage.error(res.message);
               }
             })
-            .catch(() => {});
+            .catch((error) => {
+              ElMessage.error(error.message);
+            });
         },
       },
       {
@@ -102,8 +104,8 @@ onMounted(() => {
       position: 'right',
     },
     after: () => {
-      if (props.form.content) {
-        vditor.value.setValue(props.form.content);
+      if (props.form.data.content) {
+        vditor.value.setValue(props.form.data.content);
       }
     },
   });

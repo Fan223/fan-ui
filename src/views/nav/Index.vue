@@ -49,8 +49,6 @@ function pageNavs() {
 pageNavs();
 
 function handleCurrentChange(index: number) {
-  console.log(index);
-
   pagination.current = index + 1;
   pageNavs();
 }

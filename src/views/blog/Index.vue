@@ -88,11 +88,15 @@ function pageArticles(categoryId: string, current: number) {
   categories.activeId = categoryId;
   pagination.current = current;
 
+  let params = stringify({
+    categoryId: categoryId,
+    flag: 'Y',
+    currentPage: pagination.current,
+    pageSize: pagination.size,
+  });
+
   request
-    .get(
-      '/fan/blog/article/pageArticles?' +
-        stringify({ currentPage: current, pageSize: pagination.size, categoryId: categoryId })
-    )
+    .get('/fan/blog/article/pageArticles?' + params)
     .then((res) => {
       pagination.total = res.data.total;
       articles.value = res.data.records;

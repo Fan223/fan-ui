@@ -9,7 +9,7 @@
       <ElFormItem prop="title" style="margin: 0">
         <ElInput
           style="height: 2.5rem"
-          v-model="addForm.title"
+          v-model="addForm.data.title"
           placeholder="请输入标题"
           clearable
           maxlength="100"
@@ -22,7 +22,7 @@
       @click="
         () => {
           dialog.visible = true;
-          addForm.content = vditorRef.vditor.getValue();
+          addForm.data.content = vditorRef.vditor.getValue();
         }
       "
       flex="~ items-center"
@@ -34,16 +34,20 @@
   </div>
 
   <Vditor ref="vditorRef" :form="addForm" />
-  <ArticlePublish :dialog="dialog" :form="addForm" />
+  <ArticlePublish :dialog="dialog" :form="addForm.data" />
 </template>
 
 <script setup lang="ts">
 import Vditor from '@/vditor/Vditor.vue';
 import ArticlePublish from './ArticlePublish.vue';
+import { Article } from './article';
 
 const addForm = reactive({
-  title: '',
-  content: '',
+  data: {
+    title: '',
+    content: '',
+    flag: 'N',
+  } as Article,
 });
 const vditorRef = ref();
 const dialog = reactive({
