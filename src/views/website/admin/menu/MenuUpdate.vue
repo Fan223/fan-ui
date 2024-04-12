@@ -130,7 +130,7 @@ function updateMenu() {
 <style scoped lang="scss">
 @media (max-width: 992px) {
   :deep(.el-dialog) {
-    width: 80% !important;
+    width: 75% !important;
   }
 }
 

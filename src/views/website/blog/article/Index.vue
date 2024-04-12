@@ -8,15 +8,13 @@
       <ElSelect v-model="queryForm.categoryId" placeholder="请选择文章分类" clearable>
         <ElOption v-for="category in categories" :key="category.id" :label="category.name" :value="category.id" />
       </ElSelect>
-    </ElFormItem>
 
-    <ElFormItem>
-      <ElButton type="primary" size="small" @click="pageArticles"> 查询 </ElButton>
+      <ElButton type="primary" size="small" @click="pageArticles" ml-4> 查询 </ElButton>
       <ElButton type="info" size="small" @click="queryFormRef.resetFields()"> 重置 </ElButton>
     </ElFormItem>
   </ElForm>
 
-  <div flex="~ justify-between">
+  <div flex="~ justify-between" my-2>
     <b ml--4> 查询结果 </b>
     <div>
       <RouterLink to="/article/add">
@@ -204,7 +202,7 @@ function exportArticles() {
 <style scoped lang="scss">
 .el-form {
   .el-form-item {
-    margin: 0.5rem 2rem 1rem 0;
+    margin: 0.5rem 1rem 0.5rem 0;
   }
 
   .el-input,
@@ -214,11 +212,9 @@ function exportArticles() {
 }
 
 @media (max-width: 768px) {
-  .el-form {
-    .el-input,
-    .el-select {
-      width: 100px;
-    }
+  .el-form .el-input,
+  .el-form .el-select {
+    width: 100px;
   }
 }
 </style>

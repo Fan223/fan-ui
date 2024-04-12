@@ -17,15 +17,13 @@
         <ElOption label="顶部" value="top" />
         <ElOption label="侧栏" value="aside" />
       </ElSelect>
-    </ElFormItem>
 
-    <ElFormItem>
-      <ElButton type="primary" size="small" @click="listMenus"> 查询 </ElButton>
+      <ElButton type="primary" size="small" @click="listMenus" ml-4> 查询 </ElButton>
       <ElButton type="info" size="small" @click="queryFormRef.resetFields()"> 重置 </ElButton>
     </ElFormItem>
   </ElForm>
 
-  <div flex="~ justify-between">
+  <div flex="~ justify-between" my-2>
     <b ml--4> 查询结果 </b>
     <div>
       <ElButton type="primary" size="small" @click="dialog.add = true"> 新增 </ElButton>
@@ -170,7 +168,7 @@ function batchDeleteMenus(id: string | string[]) {
 <style scoped lang="scss">
 .el-form {
   .el-form-item {
-    margin: 0.5rem 2rem 1rem 0;
+    margin: 0.5rem 1rem 0.5rem 0;
   }
 
   .el-input,
@@ -180,11 +178,9 @@ function batchDeleteMenus(id: string | string[]) {
 }
 
 @media (max-width: 768px) {
-  .el-form {
-    .el-input,
-    .el-select {
-      width: 100px;
-    }
+  .el-form .el-input,
+  .el-form .el-select {
+    width: 100px;
   }
 }
 </style>
