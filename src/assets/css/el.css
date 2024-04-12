@@ -99,3 +99,10 @@
 .el-tree {
   --el-fill-color-blank: var(--background-primary);
 }
+
+.el-textarea {
+  --el-fill-color-blank: var(--background-secondary);
+  --el-border-color: var(--border-color-bright);
+  --el-border-color-hover: var(--text-accent);
+  --el-color-primary: var(--text-accent);
+}
