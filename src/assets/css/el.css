@@ -41,6 +41,7 @@
   --el-border-color: var(--border-color-bright);
   --el-border-color-hover: var(--text-accent);
   --el-color-primary: var(--text-accent);
+  --el-text-color-placeholder: var(--text-dim);
 }
 
 .el-popper {

@@ -1,33 +1,36 @@
 <template>
-  <div class="category" grid m-8 p-3 rd-3>
+  <div class="category" grid m-8 p-4 rd-4>
     <ul :class="{ expand: categories.expand }" list-none flex="~ wrap" h-12 m-0 p-0 overflow-y-hidden>
-      <li :class="{ active: categories.activeId === '' }" @click="pageArticles('', 1)" m-2 rd-2 cursor-pointer>
-        <div p="x-3 y-2" w-16 text-center>全部</div>
+      <li :class="{ active: queryForm.categoryId === '' }" @click="handleCategoryChange('')" m-2 rd-2 cursor-pointer>
+        <div p-2 w-16 text-center>全部</div>
       </li>
-      <li v-for="category in categories.data" @click="pageArticles(category.id, 1)" flex m-2 rd-2 cursor-pointer>
-        <div :class="{ active: categories.activeId === category.id }" p="x-3 y-2">{{ category.name }}</div>
+      <li v-for="category in categories.data" @click="handleCategoryChange(category.id)" flex m-2 rd-2 cursor-pointer>
+        <div :class="{ active: queryForm.categoryId === category.id }" p-2>{{ category.name }}</div>
         <b style="color: var(--text-accent)" p-2> {{ category.count }} </b>
       </li>
     </ul>
 
-    <div @click="categories.expand = !categories.expand" m="l-4 t-2" cursor-pointer>
-      <div v-if="!categories.expand" class="i-line-md-chevron-small-double-down expand-icon" />
-      <div v-if="categories.expand" class="i-line-md-chevron-small-double-up expand-icon" />
+    <div flex="~ items-center justify-center">
+      <div @click="categories.expand = !categories.expand" cursor-pointer>
+        <div v-if="!categories.expand" class="i-line-md-chevron-small-double-down hover-2" h-10 w-10 />
+        <div v-if="categories.expand" class="i-line-md-chevron-small-double-up hover-2" h-10 w-10 />
+      </div>
+      <div class="i-ic-baseline-search hover-2" @click="dialog.visible = true" h-8 w-8 cursor-pointer />
     </div>
   </div>
 
   <ul class="article" grid="~ gap-8" list-none m-8 p-0>
     <template v-for="article in articles">
       <RouterLink :to="'/article/preview/' + article.id">
-        <li h-full relative rd-3>
-          <img :src="article.cover" h-60 w-full rd-3 />
+        <li h-full relative rd-4>
+          <img :src="article.cover" h-60 w-full rd-4 />
           <div
             style="background: var(--main-gradient)"
             h-60
             w-full
             absolute
             top-0
-            rd-3
+            rd-4
             opacity-50
             mix-blend-screen
             pointer-events-none
@@ -53,21 +56,29 @@
   />
 
   <Footer v-if="articles.length > 0" />
+  <BlogSearch :dialog="dialog" :queryForm="queryForm" @pageArticles="pageArticles" />
 </template>
 
 <script setup lang="ts">
+import BlogSearch from './BlogSearch.vue';
 import { Category } from '@/views/website/blog/category/category';
 import { Article } from '@/views/website/blog/article/article';
 import { stringify } from 'qs';
 
+const queryForm = reactive({
+  categoryId: '',
+  title: '',
+});
 const pagination = reactive({
   current: 1,
   size: 12,
   total: 12,
 });
+const dialog = reactive({
+  visible: false,
+});
 
 const categories = reactive({
-  activeId: '',
   data: [] as Category[],
   expand: false,
 });
@@ -83,13 +94,16 @@ function listCategories() {
 }
 listCategories();
 
-const articles = ref([] as Article[]);
-function pageArticles(categoryId: string, current: number) {
-  categories.activeId = categoryId;
-  pagination.current = current;
+function handleCategoryChange(categoryId: string) {
+  queryForm.categoryId = categoryId;
+  pageArticles();
+}
 
+const articles = ref([] as Article[]);
+function pageArticles() {
   let params = stringify({
-    categoryId: categoryId,
+    categoryId: queryForm.categoryId,
+    title: queryForm.title,
     flag: 'Y',
     currentPage: pagination.current,
     pageSize: pagination.size,
@@ -98,36 +112,35 @@ function pageArticles(categoryId: string, current: number) {
   request
     .get('/fan/blog/article/pageArticles?' + params)
     .then((res) => {
-      pagination.total = res.data.total;
       articles.value = res.data.records;
+      pagination.total = res.data.total;
     })
     .catch((error) => {
       ElMessage.error(error.message);
     });
 }
-pageArticles('', 1);
+pageArticles();
 
 function handleCurrentChange() {
-  pageArticles(categories.activeId, pagination.current);
+  pageArticles();
 }
 </script>
 
 <style scoped lang="scss">
 .category {
-  grid-template-columns: minmax(0, 1fr) 4rem;
+  grid-template-columns: minmax(0, 1fr) 6rem;
   background-color: var(--background-secondary);
 
   ul {
     li {
       background-color: var(--background-primary);
+      &:hover {
+        opacity: 0.5;
+      }
 
       div {
         border-top-left-radius: 0.5rem;
         border-bottom-left-radius: 0.5rem;
-      }
-
-      &:hover {
-        opacity: 0.5;
       }
     }
 
@@ -142,10 +155,7 @@ function handleCurrentChange() {
   color: #ffffff;
 }
 
-.expand-icon {
-  height: 36px;
-  width: 36px;
-
+.hover-2 {
   &:hover {
     opacity: 0.5;
   }

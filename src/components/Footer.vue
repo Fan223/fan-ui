@@ -3,7 +3,7 @@
     <p m="0 b-1">
       <a href="https://beian.miit.gov.cn/" target="_blank"> 湘ICP备2022002121号-1 </a>
     </p>
-    <span> Copyright 2021-{{ currentYear }} Fan. All Rights Reserved. </span>
+    <span> Copyright 2022-{{ currentYear }} Fan. All Rights Reserved. </span>
   </div>
 </template>
 
