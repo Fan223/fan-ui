@@ -7,7 +7,9 @@
           <div class="popup" absolute ml--3 pt-3 hidden>
             <div style="background-color: var(--background-primary)" p-2 rd-2>
               <template v-for="child in menu.children">
-                <a v-if="4 === child.type" :href="child.path" flex="~ col" p="x-8 y-2" rd-2> {{ child.name }} </a>
+                <a v-if="4 === child.type" :href="child.path" target="_blank" flex="~ col" p="x-8 y-2" rd-2>
+                  {{ child.name }}
+                </a>
 
                 <RouterLink v-else :to="child.path">
                   <div class="router-link" p="x-8 y-2" rd-2>{{ child.name }}</div>
@@ -39,7 +41,7 @@ li.active {
   background-color: var(--background-trans);
 
   .popup {
-    display: block;
+    display: block !important;
   }
 }
 

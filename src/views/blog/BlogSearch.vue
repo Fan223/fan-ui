@@ -5,11 +5,18 @@
       width="60%"
       :show-close="false"
       :lock-scroll="false"
+      @opened="handleOpened"
       @close="props.queryForm.title = ''"
     >
       <div class="search" flex="~ items-center" p-2 rd-2>
-        <div class="i-ic-baseline-search" h-8 w-8 />
-        <ElInput v-model="queryForm.title" placeholder="搜索博客" clearable @keyup.enter="emit('pageArticles')" />
+        <div class="i-ic-baseline-search" h-8 w-8 cursor-pointer @click="emit('pageArticles')" />
+        <ElInput
+          ref="inputRef"
+          v-model="queryForm.title"
+          placeholder="搜索博客"
+          clearable
+          @keyup.enter="emit('pageArticles')"
+        />
       </div>
     </ElDialog>
   </div>
@@ -18,6 +25,13 @@
 <script setup lang="ts">
 const props = defineProps(['dialog', 'queryForm']);
 const emit = defineEmits(['pageArticles']);
+
+const inputRef = ref();
+const handleOpened = () => {
+  nextTick(() => {
+    inputRef.value?.focus();
+  });
+};
 </script>
 
 <style scoped lang="scss">

@@ -1,42 +1,51 @@
 <template>
-  <div v-for="i in 3" :class="'starry' + i" class="rd-50%" fixed left-0 top-0 color-white />
+  <div v-for="i in 2" :key="i" :class="['starry', `starry${i}`]" />
 </template>
 
 <script setup lang="ts"></script>
 
 <style scoped lang="scss">
-@function createShadows($n) {
-  $shadows: '#{random(100)}vw #{random(100)}vh #fff';
+@use 'sass:math';
+@use 'sass:string';
+
+@function generateShadows($n) {
+  $shadows: '#{math.random(100)}vw #{math.random(100)}vh #f1f3f9';
 
   @for $i from 2 through $n {
-    $shadows: '#{$shadows}, #{random(100)}vw #{random(100)}vh #fff';
+    $shadows: '#{$shadows}, #{math.random(100)}vw #{math.random(100)}vh #f1f3f9';
   }
-
-  @return unquote($shadows);
+  @return string.unquote($shadows);
 }
 
-$size: 1px;
-$count: 450;
-$duration: 15s;
-$twinkle: 0;
-
-.starry1 {
-  height: $size;
-  width: $size;
-  box-shadow: createShadows($count);
-  animation: moveUp $duration linear infinite;
-  z-index: -995;
+.starry {
+  position: fixed;
+  border-radius: 50%;
 
   &::after {
     content: '';
-    width: inherit;
-    height: inherit;
     position: fixed;
-    left: 0;
     top: 100vh;
+    height: inherit;
+    width: inherit;
     border-radius: inherit;
     box-shadow: inherit;
   }
+}
+
+.starry1 {
+  height: 1px;
+  width: 1px;
+  box-shadow: generateShadows(450);
+  animation: moveUp 15s linear infinite;
+  z-index: -995;
+}
+
+.starry2 {
+  height: 2px;
+  width: 2px;
+  box-shadow: generateShadows(150);
+  animation: moveUp 45s linear infinite, twinkle 30s infinite alternate;
+  z-index: -994;
 }
 
 @keyframes moveUp {
@@ -45,43 +54,13 @@ $twinkle: 0;
   }
 }
 
-@for $i from 2 through 3 {
-  $size: $size + 2px;
-  $count: calc($count / 3);
-  $duration: $duration + 15s;
-  $twinkle: $twinkle + 5s;
-
-  .starry#{$i} {
-    height: $size;
-    width: $size;
-    box-shadow: createShadows($count);
-    animation: moveUp $duration linear infinite, twinkle $twinkle infinite alternate;
-    z-index: -995 + $i;
-
-    &::after {
-      content: '';
-      height: inherit;
-      width: inherit;
-      position: fixed;
-      left: 0;
-      top: 100vh;
-      border-radius: inherit;
-      box-shadow: inherit;
-    }
-  }
-}
-
 @keyframes twinkle {
   0% {
-    opacity: 1;
-  }
-
-  50% {
     opacity: 0;
   }
 
   100% {
-    opacity: 1;
+    opacity: 0.8;
   }
 }
 </style>

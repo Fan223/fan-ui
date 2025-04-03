@@ -1,47 +1,38 @@
 <template>
-  <div class="category" grid m-8 p-4 rd-4>
-    <ul :class="{ expand: categories.expand }" list-none flex="~ wrap" h-12 m-0 p-0 overflow-y-hidden>
-      <li :class="{ active: queryForm.categoryId === '' }" @click="handleCategoryChange('')" m-2 rd-2 cursor-pointer>
-        <div p-2 w-16 text-center>全部</div>
-      </li>
-      <li v-for="category in categories.data" @click="handleCategoryChange(category.id)" flex m-2 rd-2 cursor-pointer>
-        <div :class="{ active: queryForm.categoryId === category.id }" p-2>{{ category.name }}</div>
-        <b style="color: var(--text-accent)" p-2> {{ category.count }} </b>
-      </li>
-    </ul>
+  <!-- 推荐文章 -->
+  <Article :articles="recommendArticles.slice(0, 1)" layout="vertical" />
 
-    <div flex="~ items-center justify-center">
-      <div @click="categories.expand = !categories.expand" cursor-pointer>
-        <div v-if="!categories.expand" class="i-line-md-chevron-small-double-down hover-2" h-10 w-10 />
-        <div v-if="categories.expand" class="i-line-md-chevron-small-double-up hover-2" h-10 w-10 />
+  <div class="article-recommend" v-if="recommendArticles.length > 1">
+    <!-- 推荐栏 -->
+    <div style="background: var(--main-gradient)" p-1 rd-4>
+      <div
+        style="background-color: var(--background-secondary)"
+        h-full
+        w-full
+        p-4
+        rd-4
+        flex="~ items-center justify-center"
+        op-90
+      >
+        <div class="i-ic:round-recommend" h-8 w-8 />
+        <b ml-2>推荐文章</b>
       </div>
-      <div class="i-ic-baseline-search hover-2" @click="dialog.visible = true" h-8 w-8 cursor-pointer />
     </div>
+
+    <!-- 推荐文章 -->
+    <Article :articles="recommendArticles.slice(1, 3)" :column="2" />
   </div>
 
-  <ul class="article" grid="~ gap-8" list-none m-8 p-0>
-    <template v-for="article in articles">
-      <RouterLink :to="'/article/preview/' + article.id">
-        <li h-full relative rd-4>
-          <img :src="article.cover" h-60 w-full rd-4 />
-          <div
-            style="background: var(--main-gradient)"
-            h-60
-            w-full
-            absolute
-            top-0
-            rd-4
-            opacity-50
-            mix-blend-screen
-            pointer-events-none
-          />
-          <div style="background: var(--article-cover)" h-60 w-full absolute top-0 pointer-events-none />
-          <h1 style="color: var(--text-bright)" mx-6 text-6>{{ article.title }}</h1>
-          <p mx-6>{{ article.content }}</p>
-        </li>
-      </RouterLink>
-    </template>
-  </ul>
+  <!-- 分类 -->
+  <Category
+    :categories="categories"
+    :selectId="queryForm.categoryId"
+    @handleCategoryChange="handleCategoryChange"
+    @handleDialogVisible="handleDialogVisible"
+  />
+
+  <!-- 文章 -->
+  <Article :articles="articles" />
 
   <ElPagination
     layout="prev, pager, next"
@@ -61,8 +52,9 @@
 
 <script setup lang="ts">
 import BlogSearch from './BlogSearch.vue';
-import { Category } from '@/views/website/blog/category/category';
-import { Article } from '@/views/website/blog/article/article';
+import Article from './Article.vue';
+import { type Article as ArticleType } from '@/views/website/blog/article/article';
+import Category from './Category.vue';
 import { stringify } from 'qs';
 
 const queryForm = reactive({
@@ -77,16 +69,25 @@ const pagination = reactive({
 const dialog = reactive({
   visible: false,
 });
+function handleDialogVisible() {
+  dialog.visible = true;
+}
 
-const categories = reactive({
-  data: [] as Category[],
-  expand: false,
-});
+// 推荐文章
+const recommendArticles = ref<ArticleType[]>([]);
+function listRecommendArticles() {
+  request.get('/fan/blog/article/listRecommendArticles').then((res) => {
+    recommendArticles.value = res.data;
+  });
+}
+listRecommendArticles();
+
+const categories = ref([]);
 function listCategories() {
   request
     .get('/fan/blog/category/listCategories?flag=Y')
     .then((res) => {
-      categories.data = res.data;
+      categories.value = res.data;
     })
     .catch((error) => {
       ElMessage.error(error.message);
@@ -99,7 +100,7 @@ function handleCategoryChange(categoryId: string) {
   pageArticles();
 }
 
-const articles = ref([] as Article[]);
+const articles = ref([] as ArticleType[]);
 function pageArticles() {
   let params = stringify({
     categoryId: queryForm.categoryId,
@@ -127,65 +128,16 @@ function handleCurrentChange() {
 </script>
 
 <style scoped lang="scss">
-.category {
-  grid-template-columns: minmax(0, 1fr) 6rem;
-  background-color: var(--background-secondary);
-
-  ul {
-    li {
-      background-color: var(--background-primary);
-      &:hover {
-        opacity: 0.5;
-      }
-
-      div {
-        border-top-left-radius: 0.5rem;
-        border-bottom-left-radius: 0.5rem;
-      }
-    }
-
-    &.expand {
-      height: auto !important;
-    }
-  }
-}
-
-.active {
-  background: var(--main-gradient);
-  color: #ffffff;
-}
-
-.hover-2 {
-  &:hover {
-    opacity: 0.5;
-  }
-}
-
-.article {
-  grid-template-columns: repeat(3, 1fr);
-
-  li {
-    background-color: var(--background-secondary);
-
-    p {
-      word-break: break-word;
-
-      &::after {
-        content: '...';
-      }
-    }
-  }
+.article-recommend {
+  display: grid;
+  gap: 2rem;
+  margin: 2rem;
+  grid-template-columns: auto 1fr;
 }
 
 @media (max-width: 992px) {
-  .article {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 768px) {
-  .article {
-    grid-template-columns: 1fr;
+  .article-recommend {
+    grid-template-columns: auto;
   }
 }
 </style>

@@ -1,7 +1,7 @@
-import { defineConfig, presetUno, presetIcons, presetAttributify, presetTypography, presetTagify } from 'unocss';
+import { defineConfig, presetWind4, presetIcons, presetAttributify, presetTypography, presetTagify } from 'unocss';
 
 export default defineConfig({
-  presets: [presetUno(), presetIcons(), presetAttributify(), presetTypography(), presetTagify()],
+  presets: [presetWind4(), presetIcons(), presetAttributify(), presetTypography(), presetTagify()],
   safelist: [
     'i-mdi-navigation-variant-outline',
     'i-ic-round-menu-book',

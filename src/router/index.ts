@@ -12,7 +12,7 @@ const router = createRouter({
       path: '/',
       name: 'Layout',
       component: () => import('@/layout/Layout.vue'),
-      redirect: '/nav',
+      redirect: '/blog',
       children: [
         { path: '/aside', name: 'Aside', component: () => import('@/layout/aside/Aside.vue') },
         { path: '/:pathMatch(.*)*', name: '404', component: () => import('@/error/404.vue') },

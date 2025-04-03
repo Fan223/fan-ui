@@ -10,7 +10,7 @@
     z-999
   >
     <div flex="~ items-center">
-      <Logo height="2.5" width="2" />
+      <Logo @click="$router.go(0)" cursor-pointer />
       <Nav id="nav" />
     </div>
 
@@ -28,9 +28,8 @@
         </div>
         <div
           class="i-ic-outline-rocket header-icon"
-          style="transition: var(--main-transition)"
+          style="transition: var(--main-transition); transform: translateY(-0.5rem)"
           absolute
-          translate-y--2
           opacity-0
         />
       </div>
@@ -81,7 +80,7 @@ header {
     }
     .i-ic-outline-rocket {
       opacity: 1;
-      transform: translateY(0);
+      transform: translateY(0) !important;
     }
   }
 }
@@ -98,7 +97,7 @@ header {
     display: none;
   }
   .i-line-md-menu-fold-left {
-    display: block;
+    display: block !important;
   }
 }
 </style>

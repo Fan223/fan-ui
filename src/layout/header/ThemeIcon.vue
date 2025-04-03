@@ -1,28 +1,17 @@
 <template>
-  <div :style="{ height: props.size, width: props.size }" cursor-pointer>
-    <div class="i-ic-twotone-contrast" v-if="'OS' === theme" @click="theme = 'dark'" />
-    <div
-      v-if="'dark' === theme"
-      class="i-line-md-sunny-filled-loop-to-moon-filled-loop-transition"
-      @click="theme = 'light'"
-    />
-    <div
-      v-if="'light' === theme"
-      class="i-line-md-moon-filled-to-sunny-filled-loop-transition"
-      @click="theme = 'dark'"
-    />
-  </div>
+  <Icon :size="props.size" cursor-pointer>
+    <Icon i-ic:round-contrast v-if="'os' === theme" @click="changeTheme('light')" />
+    <Icon i-line-md:sunny-filled-loop v-if="'light' === theme" @click="changeTheme('dark')" />
+    <Icon i-line-md:moon-filled-loop v-if="'dark' === theme" @click="changeTheme('os')" />
+  </Icon>
 </template>
 
 <script setup lang="ts">
-import theme from '@/assets/ts/useTheme';
+import { theme, changeTheme } from '@/assets/ts/theme';
 
-const props = defineProps(['size']);
+const props = withDefaults(defineProps<{ size?: string }>(), {
+  size: '2rem',
+});
 </script>
 
-<style scoped lang="scss">
-div {
-  height: inherit;
-  width: inherit;
-}
-</style>
+<style scoped lang="scss"></style>

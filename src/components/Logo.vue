@@ -1,18 +1,13 @@
 <template>
-  <div
-    :style="{ height: props.height + 'rem', width: props.width + 'rem' }"
-    @click="$router.go(0)"
-    bg-black
-    cursor-pointer
-  >
+  <Aurora :style="{ height: props.height, width: props.width, padding: padding }">
     <div
       :style="{
-        height: props.height - 0.5 + 'rem',
-        width: props.width - 0.5 + 'rem',
-        background: 'var(--main-gradient)',
+        background: '#1a1a1a',
+        padding: padding,
       }"
+      h-full
       flex
-      color-white
+      c-white
     >
       <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
         <path
@@ -30,16 +25,29 @@
         />
       </svg>
     </div>
-  </div>
+  </Aurora>
 </template>
 
 <script setup lang="ts">
-const props = defineProps(['height', 'width']);
+interface Props {
+  height?: string;
+  width?: string;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  height: '3rem',
+  width: '2.5rem',
+});
+
+const padding = computed(() => {
+  let number = parseFloat(props.height);
+  let unit = props.height.replace(number.toString(), '');
+  return `${number / 10}${unit}`;
+});
 </script>
 
 <style scoped lang="scss">
 div {
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-  padding: 0.25rem;
 }
 </style>
