@@ -44,7 +44,7 @@
                   fontSize: 'horizontal' === defaultLayout ? '1.125rem' : '1.25rem',
                 }"
                 my-4
-                break-words
+                break-all
               >
                 {{ article.content }}
               </p>
