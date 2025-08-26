@@ -32,7 +32,33 @@
   />
 
   <!-- 文章 -->
-  <Article :articles="articles" />
+  <div flex>
+    <Article :articles="articles" />
+
+    <ul v-if="subCategories && subCategories.length > 0" class="sub-category" sticky top-24 m="t-6 r-8" rd-4>
+      <li
+        v-for="category in subCategories"
+        flex
+        m-4
+        rd-2
+        whitespace-nowrap
+        cursor-pointer
+        text-center
+        @click="handleSubCategoryChange(category.id)"
+      >
+        <div
+          :class="{ active: subCategoryId === category.id }"
+          style="border-top-left-radius: inherit; border-bottom-left-radius: inherit"
+          p="l-4 r-2 y-2"
+        >
+          {{ category.name }}
+        </div>
+        <b style="color: var(--text-accent)" p="l-2 r-4 y-2">
+          {{ category.count }}
+        </b>
+      </li>
+    </ul>
+  </div>
 
   <ElPagination
     layout="prev, pager, next"
@@ -96,14 +122,38 @@ function listCategories() {
 listCategories();
 
 function handleCategoryChange(categoryId: string) {
+  console.log('categoryId', categoryId);
+  subCategoryId.value = undefined;
   queryForm.categoryId = categoryId;
+  listSubCategories(categoryId);
   pageArticles();
+}
+
+function handleSubCategoryChange(categoryId: string) {
+  subCategoryId.value = categoryId;
+  pageArticles();
+}
+
+const subCategoryId = ref();
+const subCategories = ref();
+function listSubCategories(parentId: string) {
+  subCategories.value = [];
+  if (parentId) {
+    request
+      .get('/fan/blog/category/listCategories?parentId=' + parentId)
+      .then((res) => {
+        subCategories.value = res.data;
+      })
+      .catch((error) => {
+        ElMessage.error(error.message);
+      });
+  }
 }
 
 const articles = ref([] as ArticleType[]);
 function pageArticles() {
   let params = stringify({
-    categoryId: queryForm.categoryId,
+    categoryId: subCategoryId.value || queryForm.categoryId,
     title: queryForm.title,
     flag: 'Y',
     currentPage: pagination.current,
@@ -133,6 +183,29 @@ function handleCurrentChange() {
   gap: 2rem;
   margin: 2rem;
   grid-template-columns: auto 1fr;
+}
+
+.sub-category {
+  background-color: var(--background-secondary);
+  height: calc(100vh - 8rem);
+
+  li {
+    background-color: var(--background-primary);
+
+    &:first-child {
+      margin-top: 2rem;
+    }
+
+    &:hover {
+      opacity: 0.5;
+    }
+  }
+}
+
+.active {
+  background: var(--main-gradient);
+  color: #ffffff;
+  font-weight: bold;
 }
 
 @media (max-width: 992px) {

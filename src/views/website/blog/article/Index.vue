@@ -5,9 +5,15 @@
       <ElInput v-model="queryForm.title" placeholder="请输入文章标题" clearable />
     </ElFormItem>
     <ElFormItem prop="categoryId" label="文章分类">
-      <ElSelect v-model="queryForm.categoryId" placeholder="请选择文章分类" clearable>
-        <ElOption v-for="category in categories" :key="category.id" :label="category.name" :value="category.id" />
-      </ElSelect>
+      <ElTreeSelect
+        v-model="queryForm.categoryId"
+        :data="categories"
+        placeholder="请选择文章分类"
+        clearable
+        check-strictly
+        check-on-click-node
+        :props="{ label: 'name', value: 'id', children: 'children' }"
+      />
 
       <ElButton type="primary" size="small" @click="pageArticles" ml-4> 查询 </ElButton>
       <ElButton type="info" size="small" @click="queryFormRef.resetFields()"> 重置 </ElButton>
@@ -90,6 +96,7 @@
 </template>
 
 <script setup lang="ts">
+import { ElTreeSelect } from 'element-plus';
 import { Category } from '../category/category';
 import { Article } from './article';
 import { stringify } from 'qs';
@@ -111,9 +118,9 @@ function handleSelectionChange(selection: any[]) {
 }
 
 const categories = ref([] as Category[]);
-function listCategories() {
+function listCategoryTree() {
   request
-    .get('/fan/blog/category/listCategories')
+    .get('/fan/blog/category/listCategoryTree')
     .then((res) => {
       categories.value = res.data;
     })
@@ -121,7 +128,7 @@ function listCategories() {
       ElMessage.error(error.message);
     });
 }
-listCategories();
+listCategoryTree();
 
 const articles = ref([] as Article[]);
 function pageArticles() {

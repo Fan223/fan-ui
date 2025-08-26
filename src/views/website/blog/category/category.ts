@@ -6,4 +6,5 @@ export interface Category {
   createTime: string;
   updateTime: string;
   count: string;
+  children?: Category[];
 }
